@@ -3,6 +3,6 @@ on housing affordability in Vancouver.
 
 TO DO:
 
-- [ ] Make a github repository
+- [X] Make a github repository
 - [ ] Access unaggregated data from CMHC 
 - [ ] Clean permit data
