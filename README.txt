@@ -64,6 +64,7 @@ This project addresses the urgent problem of housing affordability in Vancouver,
 - [X] Locate and download data sources
 - [X] Set up git repo
 - [X] Sprint 1 Presentation
+- [ ] Describe data sets specifically and create data dictionary
 - [ ] Submit Sprint 1
 - [ ] Research models used in machine learning projects involving housing and gather references
 - [ ] Read complete Broadway Plan proposal
