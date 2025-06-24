@@ -109,7 +109,10 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 
 - [X] Complete first round of cleaning building permit data (from City of Vancouver Open Data Portal)
 - [ ] Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
-- [ ] Download and encode census dictionary in order to connect neighborhoods with census tracts hierarchically 
+- [ ] Acquire CMHC geographic shapefiles
+- [ ] Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
+- [ ] Create geographic hierarchy through special joins
+- [ ] Impute economic data hierarchically 
 - [ ] Clean economic data (from CMHC)
 - [X] Exploratory data analysis of building permit data
 - [ ] Exploratory data analysis of economic data
