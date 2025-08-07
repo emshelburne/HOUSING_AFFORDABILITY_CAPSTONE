@@ -87,7 +87,7 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 
 ##### Data Dictionary for economic data from CMHC
 
-... TO BE ADDED
+Link to CPI inflation conversion source: https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1810000501
 
 ### To do:
 
@@ -100,29 +100,25 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 - [X] Sprint 1 Presentation
 - [X] Create data dictionary for housing permit data
 - [ ] Create data dictionary for economic CMHC data
-- [ ] Submit Sprint 1
+- [X] Submit Sprint 1
 - [ ] Research models used in machine learning projects involving housing and gather references
-- [ ] Read complete Broadway Plan proposal
 
 
 #### Programming
 
 - [X] Complete first round of cleaning building permit data (from City of Vancouver Open Data Portal)
 - [ ] Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
-- [ ] Acquire CMHC geographic shapefiles
-- [ ] Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
-- [ ] Create geographic hierarchy through special joins
-- [ ] Impute economic data hierarchically 
-- [ ] Clean economic data (from CMHC)
+- [X] Acquire CMHC geographic shapefiles
+- [X] Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
+- [X] Create geographic hierarchy through special joins
+- [X] Impute economic data hierarchically 
+- [X] Clean economic data (from CMHC)
 - [X] Exploratory data analysis of building permit data
 - [ ] Exploratory data analysis of economic data
 - [ ] Feature engineering
 - [ ] Baseline modeling
 
 
-#### Supplementary
-
-- [ ] Look for more economic data (income by census tract, etc.)
 
 
 
