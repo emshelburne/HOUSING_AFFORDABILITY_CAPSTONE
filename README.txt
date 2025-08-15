@@ -62,30 +62,59 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 ... GOOGLE DRIVE LINK TO COMPLETE DATA/ FOLDER: https://drive.google.com/drive/folders/1qHuZ4MsZvvnML86mPKePkJCMyprbPVhp?usp=drive_link 
 
 
-##### Data Dictionary for Issued Building Permits table from City of Vancouver: Open Data (as stored in issued_building_permits_filter_dwelling_purposes_cleaned.csv)
+##### Data Dictionary for Issued Building Permits table from City of Vancouver: Open Data (as stored in issued_building_permits_filter_dwelling_purposes_preprocessed.csv)
 
 
-| Column Name              | Description                                                                                                                  | Type         | Sample                                       |
-|--------------------------|------------------------------------------------------------------------------------------------------------------------------|--------------|----------------------------------------------|
-| `PermitNumber`           | Unique identifier for each permit; may have multiple permits per project site.                                               | String       | BP-2023-03902                                |
-| `PermitNumberCreatedDate`| Date the permit number was assigned (via staff or online process).                                                           | Datetime     | 2023-10-24                                   |
-| `IssueDate`              | Date the permit was officially issued.                                                                                       | Datetime     | 2023-10-30                                   |
-| `PermitElapsedDays`      | Days between permit number creation and issuance; influenced by complexity and review time.                                  | Integer      | 6                                            |
-| `ProjectValue`           | Estimated construction value at issuance; used to calculate base permit fees.                                                | Float        | 120000                                       |
-| `TypeOfWork`             | Type of construction (e.g., Addition / Alteration, Demolition, New Buildings).                                               | String       | Addition / Alteration                        |
-| `Address`                | Full address of the property receiving the permit.                                                                           | String       | 428 BEACH CRESCENT #2001, Vancouver, BC      |
-| `ProjectDescription`     | Description of work scope; field available for permits issued after 2018.                                                    | String       | Interior alterations to dwelling unit #2001. |
-| `PermitCategory`         | Categorization by project complexity and scope based on multiple fields.                                                     | String       | Renovation - Residential - Lower Complexity  |
-| `Applicant`              | Name of the applicant (owner, agent, or contractor).                                                                         | String       | Nader Shabdiz DBA: NSR Contracting Inc.      |
-| `PropertyUse`            | General property use type (e.g., Dwelling Uses).                                                                             | String       | Dwelling Uses                                |
-| `SpecificUseCategory`    | More detailed category of property use (e.g., Multiple Dwelling).                                                            | String       | Multiple Dwelling                            |
-| `BuildingContractor`     | Contractor responsible for the project at issuance.                                                                          | String       | BigCity Excavation Ltd                       |
-| `GeoLocalArea`           | Vancouver local planning area in which the property is located.                                                              | String       | Downtown                                     |
-| `Geom`                   | GeoJSON-style geographic coordinates of the building site.                                                                   | Geo shape    | {"coordinates":[-123.1279186,49.271598]}     |
-| `geo_point_2d`           | Geographic coordinates in lat-long format.                                                                                   | Geo point    | [49.271598, -123.1279186]                    |
+| Column Name                                               | Description                                                                              | Type             | Sample                                       |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------- | -------------------------------------------- |
+| `issue_date`                                              | Date the permit was officially issued.                                                   | Datetime         | 2023-10-30                                   |
+| `project_description`                                     | Short free-text summary of the permitted work.                                           | String           | Interior alterations to dwelling unit        |
+| `geom`                                                    | GeoJSON-style point for the permit location (lon/lat).                                   | String (GeoJSON) | `{"coordinates":[-123.1279186,49.271598]}`   |
+| `project_value`                                           | Estimated construction value at issuance (CAD converted to 2024 CPI).                    | Float            | 120000                                       |
+| `nbhd`                                                    | Vancouver neighbourhood as defined by CMHC.                                              | String           | Downtown                                     |
+| `zone`                                                    | Survey zone as defined by CMHC.                                                          | String           | Southeast Vancouver                          |
+| `duplex_w_secondary_suite`                                | Indicator flag: 1 if the permit involves a duplex with a secondary suite.                | Integer {0,1}    | 0                                            |
+| `laneway_house`                                           | Indicator flag: 1 if the permit involves a laneway house.                                | Integer {0,1}    | 1                                            |
+| `duplex`                                                  | Indicator flag: 1 if the permit involves a duplex.                                       | Integer {0,1}    | 0                                            |
+| `multiple_conversion_dwelling`                            | Indicator flag: 1 if the permit involves a Multiple Conversion Dwelling.                 | Integer {0,1}    | 0                                            |
+| `dwelling_unit`                                           | Indicator flag: 1 if the permit concerns a (generic) dwelling unit.                      | Integer {0,1}    | 1                                            |
+| `multiple_dwelling`                                       | Indicator flag: 1 if the permit involves multiple dwelling (e.g., apartments).           | Integer {0,1}    | 0                                            |
+| `single_detached_house`                                   | Indicator flag: 1 if the permit involves a single detached house.                        | Integer {0,1}    | 0                                            |
+| `single_detached_house_w_sec_suite`                       | Indicator flag: 1 if the permit involves a single detached house with a secondary suite. | Integer {0,1}    | 0                                            |
+| `type_of_work_demolition_deconstruction`                  | Indicator flag: 1 if the work type is demolition/deconstruction.                         | Integer {0,1}    | 0                                            |
+| `type_of_work_new_building`                               | Indicator flag: 1 if the work type is a new building.                                    | Integer {0,1}    | 1                                            |
+| `permit_category_new_build_low_density_housing`           | Indicator flag: 1 if categorized as “New Build — Low Density Housing.”                   | Integer {0,1}    | 0                                            |
+| `permit_category_new_build_standalone_laneway`            | Indicator flag: 1 if categorized as “New Build — Standalone Laneway.”                    | Integer {0,1}    | 0                                            |
+| `permit_category_renovation_residential_lower_complexity` | Indicator flag: 1 if categorized as “Renovation — Residential — Lower Complexity.”       | Integer {0,1}    | 1                                            |
 
 
 ##### Data Dictionary for economic data from CMHC
+
+
+| Column Name                       | Description                                                                                                                  | Type    | Sample         |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- | -------------- |
+| `nbhd`                            | Vancouver neighbourhood as defined by CMHC.                                                                                  | String  | ambleside      |
+| `zone`                            | Survey zone as defined by CMHC.                                                                                              | String  | West Vancouver |
+| `year`                            | Calendar year of observation.                                                                                                | Integer | 2019           |
+| `avg_rent_[unit_type]`            | Average monthly rent (CAD converted to 2024 CPI) for the given unit type in the neighbourhood and year.                      | Float   | 1970.49        |
+| `med_rent_[unit_type]`            | Median monthly rent (CAD converted to 2024 CPI) for the given unit type in the neighbourhood and year.                       | Float   | 2033.14        |
+| `vacancy_rate_[unit_type]`        | Vacancy rate (%) for the given unit type in the neighbourhood and year.                                                      | Float   | 2.4            |
+| `avg_rent_[unit_type]_change`     | Year-over-year change in average rent for the given unit type; expressed as a proportion (e.g., `0.05` = +5%).               | Float   | 0.0474         |
+| `med_rent_[unit_type]_change`     | Year-over-year change in median rent for the given unit type; expressed as a proportion.                                     | Float   | 0.0354         |
+| `vacancy_rate_[unit_type]_change` | Year-over-year percentage-point difference in vacancy rate (current% − prior%).                                              | Float   | 0.2            |
+
+
+##### Data Dictionary for Geographic Definitions from CMHC
+
+
+| Column Name | Description                                                                    | Type                            | Sample                                                |
+| ----------- | ------------------------------------------------------------------------------ | ------------------------------- | ----------------------------------------------------- |
+| `nbhd`      | Vancouver neighbourhood as defined by CMHC.                                    | String                          | West End/Stanley Park North                           |
+| `zone`      | Survey zone as defined by CMHC.                                                | String                          | West End/Stanley Park                                 |
+| `geometry`  | Neighbourhood boundary geometry as a Polygon/MultiPolygon in the GeoDataFrame. | Geometry (Polygon/MultiPolygon) | `POLYGON ((-123.1402 49.29038, -123.13862 49.28...))` |
+
+
+
 
 Link to CPI inflation conversion source: https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1810000501
 
@@ -99,22 +128,22 @@ Link to CPI inflation conversion source: https://www150.statcan.gc.ca/t1/tbl1/en
 - [X] Set up git repo
 - [X] Sprint 1 Presentation
 - [X] Create data dictionary for housing permit data
-- [ ] Create data dictionary for economic CMHC data
+- [X] Create data dictionary for economic CMHC data
 - [X] Submit Sprint 1
-- [ ] Research models used in machine learning projects involving housing and gather references
-
+- [ ] Sprint 2 Presentation
+- [ ] Submit Sprint 2
 
 #### Programming
 
 - [X] Complete first round of cleaning building permit data (from City of Vancouver Open Data Portal)
-- [ ] Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
+- [X] Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
 - [X] Acquire CMHC geographic shapefiles
 - [X] Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
 - [X] Create geographic hierarchy through special joins
 - [X] Impute economic data hierarchically 
 - [X] Clean economic data (from CMHC)
 - [X] Exploratory data analysis of building permit data
-- [ ] Exploratory data analysis of economic data
+- [X] Exploratory data analysis of economic data
 - [ ] Feature engineering
 - [ ] Baseline modeling
 
