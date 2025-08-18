@@ -1,16 +1,14 @@
-## Data-Driven Insights into Housing Trends: Forecasting Affordability Risks
+## Machine Learning for Housing Affordability: Clustering Development Patterns
 =========================
 
 ### Executive Summary
 
-This project addresses the urgent problem of housing affordability in Vancouver, particularly in the context of large-scale redevelopment plans like the Broadway Plan. While framed as a solution to the housing crisis, such plans have raised serious concerns among community members and housing advocates, who fear that high-rise developments may accelerate gentrification, displace renters, and make neighborhoods less affordable. The data science opportunity lies in using machine learning to analyze historical patterns of development and neighborhood-level economic indicators—such as rent, income, and vacancy rates—to build a predictive model that estimates how new construction may impact local affordability. By merging and processing datasets from CMHC, BC Assessment, and the City of Vancouver, this project aims to provide a rigorous, data-driven supplement to the ongoing public debate around urban development. While the project is in its early stages, the goal is to develop a publicly accessible tool or report that empowers community members and policymakers with transparent, evidence-based insights into the potential consequences of redevelopment.
+This project investigates the drivers of housing affordability in Vancouver, focusing on the intersection of development initiatives (e.g., the Broadway Plan) and neighborhood-level socioeconomic dynamics. While redevelopment is often presented as a solution to the housing crisis, it can accelerate gentrification and displacement, particularly in renter-heavy areas. The data science opportunity lies in analyzing historical building permits alongside economic indicators (rent, income, vacancy, project values) to detect development patterns and anticipate affordability risks. Using natural language processing on permit descriptions, dimensionality reduction techniques, and a sweep of clustering algorithms (K-Means, Gaussian Mixture, Agglomerative, etc.), this project aims to uncover distinct development archetypes. These clusters will then be linked to affordability outcomes over time, offering a transparent, data-driven foundation for evaluating how redevelopment may reshape housing markets. Ultimately, the goal is to build interpretable models and visual tools that empower policymakers and communities with actionable insights.
 
 
-### Current Status (as of Sprint 1 submission)
+### Current Status (as of Sprint 2 submission)
 
-I am currently working with two major sources of data for this project: the City of Vancouver’s Open Data Portal and the Canada Mortgage and Housing Corporation (CMHC). From the City of Vancouver, I’ve pulled a dataset of approximately 30,000 entries related to issued building permits, specifically filtered for dwelling purposes. I have completed an initial round of cleaning on this dataset using an object-oriented approach, which involved converting data types, removing unnecessary columns, and handling null values. While this first pass resulted in a clean dataset with no missing values, further refinement is planned—particularly more thoughtful imputation and ensuring that row drops are only applied when strictly necessary. The cleaned dataset is stored as issued_building_permits_filter_dwelling_purposes_cleaned.csv in a publicly accessible Google Drive folder (see link below) and is now being used for exploratory data analysis in the notebook 03_dwelling_permits_EDA.
-
-For the economic data from CMHC, I am working with multiple CSV files that contain different economic indicators (e.g., average rent, vacancy rate) across various years. The data needs to be merged and aligned across time, and I am again using an object-oriented approach to structure this process. At the most granular level (census tract), a significant amount of missing data is present. To address this, I plan to implement a hierarchical geographic imputation method, where missing values at the census tract level will be filled in using data from progressively broader geographic units (e.g., neighborhood, census subdivision, city). This will require associating census tracts with higher-level geographic units, which I am currently working on by building a mapping based on official census definitions. Until this geographic structure is in place and imputation is complete, I am holding off on exploratory data analysis for the CMHC dataset and focusing my efforts on the building permit data.
+The project integrates two complementary data streams: permit-level development activity from the City of Vancouver’s Open Data Portal and housing market indicators from CMHC. The permit dataset (~25,000 entries) has been cleaned and transformed with attention to type conversions, missing values, and geospatial parsing, enabling robust exploratory analysis. Natural language processing has been applied to extract keywords from project descriptions, with inverse document frequency vectorization and filtering to highlight signals of high-value or large-scale developments. These features, along with permit metadata (e.g., value, location, type of work), are clustered using multiple unsupervised methods, with hyperparameters tuned through inertia, silhouette, Davies–Bouldin, and Calinski–Harabasz scores, as well as interpretability checks. Parallel work is ongoing on CMHC economic data, where hierarchical geographic imputation was developed to address missing values at granular geographic levels. This data set is now completely cleaned, preprocessed, and converted to 2024 CAD using CPI as an inflation index. My next step is to refine these clusters for interpretability and stability, and then compare project intensity (the proportion of a given category of development project) against economic metrics in different neighborhoods a few years down the line.
 
 ### Demo
 
@@ -62,7 +60,7 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 ... GOOGLE DRIVE LINK TO COMPLETE DATA/ FOLDER: https://drive.google.com/drive/folders/1qHuZ4MsZvvnML86mPKePkJCMyprbPVhp?usp=drive_link 
 
 
-##### Data Dictionary for Issued Building Permits table from City of Vancouver: Open Data (as stored in issued_building_permits_filter_dwelling_purposes_preprocessed.csv)
+##### Data Dictionary for Issued Building Permits table from City of Vancouver: Open Data (as stored in permits.csv in the PROCESSED folder of above google drive)
 
 
 | Column Name                                               | Description                                                                              | Type             | Sample                                       |
@@ -88,7 +86,7 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 | `permit_category_renovation_residential_lower_complexity` | Indicator flag: 1 if categorized as “Renovation — Residential — Lower Complexity.”       | Integer {0,1}    | 1                                            |
 
 
-##### Data Dictionary for economic data from CMHC
+##### Data Dictionary for economic data from CMHC (as stored in full_economic_data.csv in the PROCESSED folder of above google drive)
 
 
 | Column Name                       | Description                                                                                                                  | Type    | Sample         |
@@ -104,7 +102,7 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 | `vacancy_rate_[unit_type]_change` | Year-over-year percentage-point difference in vacancy rate (current% − prior%).                                              | Float   | 0.2            |
 
 
-##### Data Dictionary for Geographic Definitions from CMHC
+##### Data Dictionary for Geographic Definitions from CMHC (as stored in nbhds_with_zones.geojson in the PROCESSED folder of above google drive)
 
 
 | Column Name | Description                                                                    | Type                            | Sample                                                |
@@ -116,36 +114,50 @@ For the economic data from CMHC, I am working with multiple CSV files that conta
 
 
 
-Link to CPI inflation conversion source: https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1810000501
+Link to CPI inflation conversion source used for all above data: https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=1810000501
+
 
 ### To do:
 
 
 #### Non-programming
 
-- [X] Sprint 0
-- [X] Locate and download data sources
-- [X] Set up git repo
-- [X] Sprint 1 Presentation
-- [X] Create data dictionary for housing permit data
-- [X] Create data dictionary for economic CMHC data
-- [X] Submit Sprint 1
-- [ ] Sprint 2 Presentation
-- [ ] Submit Sprint 2
+- [X]  Sprint 0
+- [X]  Locate and download data sources
+- [X]  Set up git repo
+- [X]  Sprint 1 Presentation
+- [X]  Create data dictionary for housing permit data
+- [X]  Create data dictionary for economic CMHC data
+- [X]  Submit Sprint 1
+- [X]  Sprint 2 Presentation
+- [X]  Submit Sprint 2
+-  [  ]  Collect references on clustering evaluation metrics (silhouette, Davies–Bouldin, Calinski–Harabasz, ARI, BIC/AIC, etc.)
+-  [  ]  Collect references on clustering algorithms and their use in urban/economic studies
+-  [ ]  Submit Sprint 3 
+-  [ ]  Final submission 
 
 #### Programming
 
-- [X] Complete first round of cleaning building permit data (from City of Vancouver Open Data Portal)
-- [X] Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
-- [X] Acquire CMHC geographic shapefiles
-- [X] Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
-- [X] Create geographic hierarchy through special joins
-- [X] Impute economic data hierarchically 
-- [X] Clean economic data (from CMHC)
-- [X] Exploratory data analysis of building permit data
-- [X] Exploratory data analysis of economic data
-- [ ] Feature engineering
-- [ ] Baseline modeling
+- [X]  Complete first round of cleaning building permit data (from City of Vancouver Open Data Portal)
+- [X]  Complete second round of cleaning building permit data (from City of Vancouver Open Data Portal)
+- [X]  Acquire CMHC geographic shapefiles
+- [X]  Restrict CMHC geographic shapefiles to Vancouver tracts, neighborhoods, and zones
+- [X]  Create geographic hierarchy through spatial joins
+- [X]  Impute economic data hierarchically
+- [X]  Clean economic data (from CMHC)
+- [X]  Exploratory data analysis of building permit data
+- [X]  Exploratory data analysis of economic data
+- [X]  Baseline NLP
+- [X]  Baseline clustering with K-Means
+- [   ]  Advanced clustering with K-Means
+- [   ]  Implement Gaussian Mixture Model clustering (with BIC/AIC evaluation)
+- [   ]  Implement Agglomerative (Ward) clustering
+- [   ]  Implement DBSCAN / HDBSCAN clustering
+- [   ]  Compare clustering outcomes across algorithms and metrics
+- [   ]  Integrate clustering results with economic indicators at neighborhood level
+- [   ]  Cluster neighborhoods by economic state (e.g., rent, vacancy profiles)
+- [   ]  Cluster permits paired with neighborhood data as “development decisions”
+
 
 
 
