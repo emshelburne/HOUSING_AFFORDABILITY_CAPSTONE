@@ -131,10 +131,10 @@ Link to CPI inflation conversion source used for all above data: https://www150.
 - [X]  Submit Sprint 1
 - [X]  Sprint 2 Presentation
 - [X]  Submit Sprint 2
--  [  ]  Collect references on clustering evaluation metrics (silhouette, Davies–Bouldin, Calinski–Harabasz, ARI, BIC/AIC, etc.)
--  [  ]  Collect references on clustering algorithms and their use in urban/economic studies
--  [ ]  Submit Sprint 3 
--  [ ]  Final submission 
+- [ ]  Collect references on clustering evaluation metrics (silhouette, Davies–Bouldin, Calinski–Harabasz, ARI, BIC/AIC, etc.)
+- [ ]  Collect references on clustering algorithms and their use in urban/economic studies
+- [ ]  Submit Sprint 3 
+- [ ]  Final submission 
 
 #### Programming
 
@@ -149,14 +149,24 @@ Link to CPI inflation conversion source used for all above data: https://www150.
 - [X]  Exploratory data analysis of economic data
 - [X]  Baseline NLP
 - [X]  Baseline clustering with K-Means
-- [   ]  Advanced clustering with K-Means
-- [   ]  Implement Gaussian Mixture Model clustering (with BIC/AIC evaluation)
-- [   ]  Implement Agglomerative (Ward) clustering
-- [   ]  Implement DBSCAN / HDBSCAN clustering
-- [   ]  Compare clustering outcomes across algorithms and metrics
-- [   ]  Integrate clustering results with economic indicators at neighborhood level
-- [   ]  Cluster neighborhoods by economic state (e.g., rent, vacancy profiles)
-- [   ]  Cluster permits paired with neighborhood data as “development decisions”
+- [X]  Advanced clustering with K-Means
+- [ ]  Complete Hyperparameter optimization for K-Means
+- [ ]  Implement Gaussian Mixture Model clustering (with BIC/AIC evaluation)
+- [ ]  Complete hyperparameter optimization for Gaussian Mixture Model clustering
+- [ ]  Implement Agglomerative (Ward) clustering
+- [ ]  Complete hyperparameter optimization for Agglomerative clustering
+- [ ]  Implement DBSCAN / HDBSCAN clustering
+- [ ]  Complete hyperparameter optimization for DBSCAN / HDBSCAN clustering
+- [ ]  Compare clustering outcomes across algorithms and metrics
+- [ ]  Integrate clustering results with economic indicators at neighborhood level
+- [ ]  Statistical testing for comparing clusters and economic indicators
+- [ ]  Summarize results of comparing cluster frequencies to economic indicators
+- [ ]  Build web app
+
+#### Optional Next steps
+
+- [ ]  Cluster neighborhoods by economic state (e.g., rent, vacancy profiles)
+- [ ]  Cluster permits paired with neighborhood data as “development decisions”
 
 
 
