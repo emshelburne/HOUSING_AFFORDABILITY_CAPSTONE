@@ -4,3 +4,7 @@ DATA/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+# HTML figures
+/iframe_figures/
+NOTEBOOKS/iframe_figures
