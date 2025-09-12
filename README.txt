@@ -150,20 +150,20 @@ Link to CPI inflation conversion source used for all above data: https://www150.
 - [X]  Baseline NLP
 - [X]  Baseline clustering with K-Means
 - [X]  Advanced clustering with K-Means
-- [ ]  Complete Hyperparameter optimization for K-Means
-- [ ]  Implement Gaussian Mixture Model clustering (with BIC/AIC evaluation)
-- [ ]  Complete hyperparameter optimization for Gaussian Mixture Model clustering
-- [ ]  Implement Agglomerative (Ward) clustering
-- [ ]  Complete hyperparameter optimization for Agglomerative clustering
-- [ ]  Implement DBSCAN / HDBSCAN clustering
-- [ ]  Complete hyperparameter optimization for DBSCAN / HDBSCAN clustering
-- [ ]  Compare clustering outcomes across algorithms and metrics
-- [ ]  Integrate clustering results with economic indicators at neighborhood level
-- [ ]  Statistical testing for comparing clusters and economic indicators
-- [ ]  Summarize results of comparing cluster frequencies to economic indicators
+- [X]  Complete Hyperparameter optimization for K-Means
+- [X]  Implement Gaussian Mixture Model clustering (with BIC/AIC evaluation)
+- [X]  Complete hyperparameter optimization for Gaussian Mixture Model clustering
+- [X]  Implement Agglomerative (Ward) clustering
+- [X]  Complete hyperparameter optimization for Agglomerative clustering
+- [X]  Implement DBSCAN / HDBSCAN clustering
+- [X]  Complete hyperparameter optimization for DBSCAN / HDBSCAN clustering
+- [X]  Compare clustering outcomes across algorithms and metrics
+- [X]  Integrate clustering results with economic indicators at neighborhood level
+- [X]  Statistical testing for comparing clusters and economic indicators
+- [X]  Summarize results of comparing cluster frequencies to economic indicators
 - [ ]  Build web app
 
-#### Optional Next steps
+#### Optional Next Steps
 
 - [ ]  Cluster neighborhoods by economic state (e.g., rent, vacancy profiles)
 - [ ]  Cluster permits paired with neighborhood data as “development decisions”
