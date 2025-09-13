@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import geopandas as gpd
 import streamlit as st
 from typing import Tuple
 
@@ -48,10 +49,25 @@ def load_econ(path: str) -> pd.DataFrame:
 # ---------- GeoJSON ----------
 
 @st.cache_data
-def load_geojson(path: str) -> dict:
+def load_geojson(path: str, id_col: str = "nbhd"):
+    
     """
-    Loads a GeoJSON file. If your GeoDataFrame column was 'nbhd',
-    the feature key will be 'properties.nbhd' (use this in Plotly).
+    Load a GeoJSON file and return (geojson_dict, geodataframe).
     """
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+
+    gdf = gpd.read_file(path)
+
+    # Ensure CRS so downstream code doesn't error
+    if gdf.crs is None:
+        gdf = gdf.set_crs("EPSG:4326", allow_override=True)
+
+    # Keep a lean copy for the geojson (id + geometry) if possible
+    if id_col in gdf.columns:
+        gdf = gdf.copy()
+        gdf[id_col] = gdf[id_col].astype(str)
+        geojson_dict = json.loads(gdf[[id_col, "geometry"]].to_json())
+    else:
+        geojson_dict = json.loads(gdf.to_json())
+    
+    return geojson_dict, gdf
+
