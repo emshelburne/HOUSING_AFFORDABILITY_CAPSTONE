@@ -14,10 +14,10 @@ st.header("Geographic Visualizer")
 
 # --- Intro text ---
 st.markdown("""
-This interactive visualizer combines **economic indicators** (rent levels or vacancy rates) 
+This interactive visualizer combines **rental economic indicators** (rent levels or vacancy rates) 
 with **building permit activity** across Vancouver neighborhoods.  
 - Neighborhoods are shaded by the selected economic metric.  
-- Colored points represent permits, sized by project value and categorized by cluster.  
+- Colored points represent permits, sized by financial project value and categorized by cluster.  
 Use the animation controls to explore how development and economic conditions have evolved over time.
 """)
 
@@ -56,6 +56,15 @@ METRIC_OPTIONS = [
 def _pretty(s: str) -> str:
     return s.replace('_', ' ').title()
 
+# --- Page state ---
+if "geo_confirmed" not in st.session_state:
+    st.session_state.geo_confirmed = False
+if "geo_params" not in st.session_state:
+    st.session_state.geo_params = {}
+if "geo_anim_token" not in st.session_state:
+    st.session_state.geo_anim_token = None  # used to force a fresh plot key
+
+# --- UI controls in a form (no rendering until submitted) ---
 with st.form("viz_controls", clear_on_submit=False):
     col1, col2, col3 = st.columns([1, 2, 1.2], vertical_alignment="center")
 
@@ -63,7 +72,8 @@ with st.form("viz_controls", clear_on_submit=False):
         permit_choice = st.selectbox(
             "Permit Type",
             options=["Builds", "Demolitions", "Renovations"],
-            index=0
+            index=0,
+            key="geo_permit_choice"
         )
 
     with col2:
@@ -71,49 +81,79 @@ with st.form("viz_controls", clear_on_submit=False):
             "Economic Metric",
             options=METRIC_OPTIONS,
             index=METRIC_OPTIONS.index("avg_rent_total"),
-            format_func=_pretty
+            format_func=_pretty,
+            key="geo_metric_choice"
         )
 
     with col3:
         pace_choice = st.selectbox(
             "Animation Pace",
             options=["Slow", "Medium", "Fast"],
-            index=0
+            index=0,
+            key="geo_pace_choice"
         )
 
-    submitted = st.form_submit_button("Update Visualization")
+    submitted = st.form_submit_button("Confirm selections")
 
-# Resolve selected permits df
+# Map permit type to the dataframe
 permits_map = {
     "Builds": builds_df,
     "Demolitions": demos_df,
     "Renovations": renos_df,
 }
-sel_permits_df = permits_map[permit_choice]
 
-# Convert pace to the function's expected lowercase
-pace_arg = pace_choice.lower()
-
-# When parameters are (re)selected and submitted, render the figure
+# --- Handle confirmation ---
 if submitted:
-    fig = monthly_permits_over_rent_map(
-        econ_df,
-        gdf,
-        sel_permits_df,
-        metric=metric_choice,
-        animation_pace=pace_arg
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    st.session_state.geo_confirmed = True
+    st.session_state.geo_params = {
+        "permit_choice": st.session_state.geo_permit_choice,
+        "metric_choice": st.session_state.geo_metric_choice,
+        "pace_choice": st.session_state.geo_pace_choice.lower(),
+    }
+    # new token forces Plotly to fully restart animation when we render
+    import time
+    st.session_state.geo_anim_token = f"{time.time():.6f}"
+
+# --- Action buttons (only visible once confirmed) ---
+btn_cols = st.columns([1, 1, 6])
+with btn_cols[0]:
+    restart = st.button("↺ Restart animation", disabled=not st.session_state.geo_confirmed)
+with btn_cols[1]:
+    clear = st.button("🧹 Clear selections", disabled=not st.session_state.geo_confirmed)
+
+if restart:
+    # Make a new token to reset the Plotly element key (hard restart of animation)
+    import time
+    st.session_state.geo_anim_token = f"{time.time():.6f}"
+
+if clear:
+    st.session_state.geo_confirmed = False
+    st.session_state.geo_params = {}
+    st.session_state.geo_anim_token = None
+
+# --- Rendering slot ---
+chart_slot = st.empty()
+
+if st.session_state.geo_confirmed and st.session_state.geo_params:
+    # Resolve selected DF + args
+    sel_df = permits_map[st.session_state.geo_params["permit_choice"]]
+    metric_arg = st.session_state.geo_params["metric_choice"]
+    pace_arg = st.session_state.geo_params["pace_choice"]
+
+    # Build figure only after confirmation / restart
+    with st.spinner("Rendering animation…"):
+        fig = monthly_permits_over_rent_map(
+            econ_df,
+            gdf,
+            sel_df,
+            metric=metric_arg,
+            animation_pace=pace_arg
+        )
+    # Use a changing key to hard-reset animation when restart is clicked
+    plot_key = f"geo_anim_{st.session_state.geo_anim_token}"
+    chart_slot.plotly_chart(fig, use_container_width=True, key=plot_key)
 else:
-    # Initial/default render (optional: you can pre-render with defaults)
-    fig = monthly_permits_over_rent_map(
-        econ_df,
-        gdf,
-        builds_df,
-        metric="avg_rent_total",
-        animation_pace="slow"
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    st.info("Pick your options above and click **Confirm selections** to render the animation.")
 
 
 # --- Cluster guide ---

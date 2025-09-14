@@ -6,6 +6,81 @@ from typing import Tuple
 
 # ---------- Permits ----------
 
+
+
+@st.cache_data(show_spinner=False)
+def get_permits(path: str) -> pd.DataFrame:
+    df = load_permits(path)
+
+    # Ensure expected columns exist and dtypes are friendly
+    expected = [
+        "permit_id",
+        "issue_date",
+        "project_description",
+        "nbhd",
+        "lon",
+        "lat",
+        "type",
+        "cluster",
+        "cluster_label",
+        "project_value",
+    ]
+    missing = [c for c in expected if c not in df.columns]
+    if missing:
+        raise ValueError(f"Missing expected columns: {missing}")
+
+    # Parse dates if needed
+    if not pd.api.types.is_datetime64_any_dtype(df["issue_date"]):
+        df["issue_date"] = pd.to_datetime(df["issue_date"], errors="coerce")
+
+    # Normalize/pretty project types for display
+    # Map common short codes to human-friendly labels
+    type_map = {
+        "demo": "Demolition",
+        "demolition": "Demolition",
+        "reno": "Renovation",
+        "renovation": "Renovation",
+        "build": "Build",
+        "new_build": "Build",
+        "new": "Build",
+    }
+    df["type_pretty"] = (
+        df["type"].astype(str).str.strip().str.lower().map(type_map).fillna(
+            df["type"].astype(str).str.strip().str.title()
+        )
+    )
+
+    return df
+
+def load_corr_results(path: str) -> pd.DataFrame:
+    """
+    Load correlation results from CSV or Parquet file.
+
+    Expected columns:
+      - x, econ, lead, corr, pval, pval_adj, n, method
+    """
+    if path.endswith(".csv"):
+        df = pd.read_csv(path)
+    elif path.endswith(".parquet"):
+        df = pd.read_parquet(path)
+    else:
+        raise ValueError(f"Unsupported file type: {path}")
+
+    # Basic sanity checks
+    required = {"x", "econ", "lead", "corr", "pval_adj"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+
+    return df
+
+
+@st.cache_data(show_spinner=False)
+def load_vis_clusters(path: str) -> pd.DataFrame:
+    df = pd.read_csv(path)
+    return df
+
+
 @st.cache_data
 def load_permits(path: str) -> pd.DataFrame:
     """
