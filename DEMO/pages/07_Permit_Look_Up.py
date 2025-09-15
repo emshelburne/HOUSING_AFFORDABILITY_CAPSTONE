@@ -2,10 +2,42 @@
 
 import streamlit as st
 import pandas as pd
-from utils.load_data import load_permits
+from utils.load_data import load_permits, resolve_sources
 from typing import Optional, Any
 import html
 import re
+
+
+src = resolve_sources()
+
+permits = load_permits(src["PERMITS"])
+
+# -----------------------------
+# Load data
+# -----------------------------
+
+# Parse dates if needed
+if "issue_date" in permits.columns and not pd.api.types.is_datetime64_any_dtype(permits["issue_date"]):
+    permits["issue_date"] = pd.to_datetime(permits["issue_date"], errors="coerce")
+
+# Pretty project types for display (outside utils)
+type_map = {
+    "demo": "Demolition",
+    "demolition": "Demolition",
+    "reno": "Renovation",
+    "renovation": "Renovation",
+    "build": "Build",
+    "new_build": "Build",
+    "new": "Build",
+}
+permits["type_pretty"] = (
+    permits["type"].astype(str).str.strip().str.lower().map(type_map).fillna(
+        permits["type"].astype(str).str.strip().str.title()
+    )
+)
+
+
+
 
 # -----------------------------
 # Page config & intro
@@ -16,23 +48,11 @@ st.write(
     """
     Use this page to **search for a single building permit** by its `permit_id` and view
     key details at a glance. Results include the **project value**, **issue date**,
-    **neighbourhood**, **coordinates** (copy/paste into Google Maps), **cluster label**,
+    **neighbourhood**, **coordinates**, **cluster label**,
     **permit type**, and the full **project description**.
     """
 )
 
-# -----------------------------
-# Configurable data path
-# -----------------------------
-DEFAULT_PERMITS_PATH = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\permits.parquet"
-
-with st.sidebar:
-    st.header("Data Settings")
-    data_path = st.text_input(
-        label="Permits Parquet Path",
-        value=DEFAULT_PERMITS_PATH,
-        help="Path to permits.parquet. Loaded via utils.load_data.load_permits.",
-    )
 
 # -----------------------------
 # Helpers
@@ -83,25 +103,53 @@ def coerce_description(x: Any) -> str:
     except Exception:
         return str(x)
 
-def anonymize_pii(s: str, email_token: str = "[email removed]", phone_token: str = "[phone removed]") -> str:
-    """Redact emails and North American-style phone numbers from a string."""
-    if not isinstance(s, str) or not s:
-        return s
-    # Emails
-    email_re = re.compile(r"(?i)\b[\w.+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
-    s = email_re.sub(email_token, s)
-    # Phones: 604-555-1212, (604) 555-1212, +1 604 555 1212, optional ext
-    phone_re = re.compile(r"""
-        (?xi)                              # verbose, case-insensitive
-        (?<!\w)                            # left boundary
-        (?:\+?1[\s.\-]*)?                  # optional +1
-        (?:\(?\d{3}\)?[\s.\-]*)            # area code
-        \d{3}[\s.\-]*\d{4}                 # local
-        (?:\s*(?:x|ext|extension)\s*\d{1,5})?  # extension
-        (?!\w)                             # right boundary
-    """)
-    s = phone_re.sub(phone_token, s)
-    return s
+
+EMAIL_RE = re.compile(r"""
+\b
+[A-Za-z0-9._%+\-]+      # user
+@
+[A-Za-z0-9.\-]+         # domain
+\.[A-Za-z]{2,}          # TLD
+\b
+""", re.VERBOSE | re.IGNORECASE)
+
+PHONE_RE = re.compile(r"""
+(?<!\w)                  # left boundary (not a word char)
+(?:\+?1[\s.\-]?)?        # optional country code
+(?:\(?\d{3}\)?[\s.\-]?)  # area code
+\d{3}[\s.\-]?\d{4}       # local number
+(?:\s*(?:x|ext\.?|extension)\s*\d{1,5})?  # optional extension
+(?!\w)                   # right boundary (not a word char)
+""", re.VERBOSE)
+
+def anonymize_pii(text: Optional[str]) -> Optional[str]:
+    if not text:
+        return text
+    text = EMAIL_RE.sub("[email redacted]", text)
+    text = PHONE_RE.sub("[phone redacted]", text)
+    return text
+
+
+
+# def anonymize_pii(s: str, email_token: str = "[email removed]", phone_token: str = "[phone removed]") -> str:
+#     """Redact emails and North American-style phone numbers from a string."""
+#     if not isinstance(s, str) or not s:
+#         return s
+#     # Emails
+#     email_re = re.compile(r"(?i)\b[\w.+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b")
+#     s = email_re.sub(email_token, s)
+#     # Phones: 604-555-1212, (604) 555-1212, +1 604 555 1212, optional ext
+#     phone_re = re.compile(r"""
+#         (?xi)                              # verbose, case-insensitive
+#         (?<!\w)                            # left boundary
+#         (?:\+?1[\s.\-]*)?                  # optional +1
+#         (?:\(?\d{3}\)?[\s.\-]*)            # area code
+#         \d{3}[\s.\-]*\d{4}                 # local
+#         (?:\s*(?:x|ext|extension)\s*\d{1,5})?  # extension
+#         (?!\w)                             # right boundary
+#     """)
+#     s = phone_re.sub(phone_token, s)
+#     return s
 
 def clean_description_for_display(s: str) -> str:
     """Light, safe cleaning for display (plain text), plus PII anonymization."""
@@ -121,36 +169,7 @@ def clean_description_for_display(s: str) -> str:
     s = anonymize_pii(s)
     return s
 
-# -----------------------------
-# Load data
-# -----------------------------
-try:
-    permits = load_permits(data_path)
 
-    # Parse dates if needed
-    if "issue_date" in permits.columns and not pd.api.types.is_datetime64_any_dtype(permits["issue_date"]):
-        permits["issue_date"] = pd.to_datetime(permits["issue_date"], errors="coerce")
-
-    # Pretty project types for display (outside utils)
-    type_map = {
-        "demo": "Demolition",
-        "demolition": "Demolition",
-        "reno": "Renovation",
-        "renovation": "Renovation",
-        "build": "Build",
-        "new_build": "Build",
-        "new": "Build",
-    }
-    permits["type_pretty"] = (
-        permits["type"].astype(str).str.strip().str.lower().map(type_map).fillna(
-            permits["type"].astype(str).str.strip().str.title()
-        )
-    )
-
-    st.success("Permits data loaded.")
-except Exception as e:
-    st.error(f"Failed to load permits: {e}")
-    st.stop()
 
 # -----------------------------
 # Search UI
@@ -158,7 +177,7 @@ except Exception as e:
 st.subheader("Search")
 q = st.text_input(
     "Enter a `permit_id` (exact or partial):",
-    placeholder="e.g., P-2019-123456",
+    placeholder="e.g., B2018-04595",
 )
 
 # Strategy:

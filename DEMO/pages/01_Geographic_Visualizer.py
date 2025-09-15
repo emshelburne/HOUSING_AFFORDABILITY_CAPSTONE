@@ -1,6 +1,6 @@
 # streamlit_page: Geographic Development Visualizer
 
-from utils.load_data import load_geojson, load_econ, load_permits
+from utils.load_data import resolve_sources, load_permits, load_econ, load_geojson
 from utils.figures import map_boundaries, monthly_permits_over_rent_map
 import json
 import pandas as pd
@@ -10,32 +10,31 @@ from typing import Tuple
 import numpy as np
 import re
 
+# ---------- Portable data paths (works locally & in the cloud)
+from pathlib import Path
+import os
+
+
+src = resolve_sources()
+
+# Load data
+demos_df = load_permits(src["DEMOS"])
+renos_df = load_permits(src["RENOS"])
+builds_df = load_permits(src["BUILDS"])
+econ_df     = load_econ(src["ECON"])
+geojson, gdf = load_geojson(src["GEOJSON"])
+
+
+
 st.header("Geographic Visualizer")
 
 # --- Intro text ---
 st.markdown("""
 This interactive visualizer combines **rental economic indicators** (rent levels or vacancy rates) 
-with **building permit activity** across Vancouver neighborhoods.  
+with **building permit activity** across Vancouver neighborhoods. Use the animation controls to explore how development and economic conditions have evolved over time.
 - Neighborhoods are shaded by the selected economic metric.  
 - Colored points represent permits, sized by financial project value and categorized by cluster.  
-Use the animation controls to explore how development and economic conditions have evolved over time.
 """)
-
-# Load data
-geo_path = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\nbhds.geojson"
-geojson, gdf = load_geojson(geo_path)
-
-econ_path = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\econ.parquet"
-econ_df = load_econ(econ_path)
-
-demos_path = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\demos.parquet"
-demos_df = load_permits(demos_path)
-
-renos_path = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\renos.parquet"
-renos_df = load_permits(renos_path)
-
-builds_path = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\builds.parquet"
-builds_df = load_permits(builds_path)
 
 
 
@@ -161,13 +160,13 @@ st.subheader("Cluster Guide")
 st.markdown("""
 **New Building Permits**  
 - **B0** – Small Detached & Duplex Mix  
-- **B1** – Large Multi-Dwelling Projects  
+- **B1** – Large Multi-Dwelling High-rise Projects  
 - **B2** – Mid-Value Family Housing  
 - **B3** – Laneway Houses (Lower Value)  
 - **B4** – Numbered Suites & Laneways  
 - **B5** – Duplexes with Secondary Suites  
 - **B6** – Detached with Suites  
-- **B7** – Large Multi-Unit Midrise Projects  
+- **B7** – Large Multi-Unit Mid-rise Projects  
 
 **Renovation Permits**  
 - **R0** – Multi-Unit Interior Renovations  

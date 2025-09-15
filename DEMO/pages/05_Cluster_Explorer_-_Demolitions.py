@@ -66,7 +66,6 @@ st.plotly_chart(fig, use_container_width=True)
 
 st.caption(
     "Tip: drag to rotate; scroll or pinch to zoom; hover for Permit ID and details. "
-    "Z-axis ticks show **only** powers of 10."
 )
 # ---------- Cluster Summary ----------
 st.markdown("---")

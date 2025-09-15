@@ -5,7 +5,28 @@ import pandas as pd
 import streamlit as st
 
 from utils.figures import plot_clusters_3d
-from utils.load_data import load_vis_clusters
+from utils.load_data import load_vis_clusters, resolve_sources
+
+
+# ---------- Data load ----------
+src = resolve_sources()
+emb = load_vis_clusters(src["VIS_CLUSTERS_BUILDS"])
+
+# src = resolve_sources()
+
+# # Load data
+# emb = load_vis_clusters(src["VIS_BUILDS"])
+
+# DATA_PATH = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\vis_clusters_builds.csv"
+
+
+# if not os.path.exists(DATA_PATH):
+#     st.error(f"Data file not found:\n`{DATA_PATH}`")
+#     st.stop()
+
+# emb = load_vis_clusters(DATA_PATH)
+
+
 
 # ---------- Page Header ----------
 st.header("Cluster Explorer: Builds")
@@ -24,15 +45,6 @@ Use the 3D view to rotate/zoom and inspect clusters. Hover to see **Permit ID**,
 """
 )
 
-# ---------- Data load ----------
-DATA_PATH = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\vis_clusters_builds.csv"
-
-
-if not os.path.exists(DATA_PATH):
-    st.error(f"Data file not found:\n`{DATA_PATH}`")
-    st.stop()
-
-emb = load_vis_clusters(DATA_PATH)
 
 # Minimal schema check (soft)
 required_cols = {"nlp_x", "nlp_y", "project_value", "cluster", "permit_id"}
@@ -66,7 +78,6 @@ st.plotly_chart(fig, use_container_width=True)
 
 st.caption(
     "Tip: drag to rotate; scroll or pinch to zoom; hover for Permit ID and details. "
-    "Z-axis ticks show **only** powers of 10."
 )
 
 # ---------- Cluster Summary ----------
@@ -83,11 +94,11 @@ st.markdown(
 - **Features:** Mix of single-detached homes and duplexes, with some laneway houses.
 - **Interpretation:** **Moderate-value detached/duplex housing**, often with fire-safety and exterior features.
 
-##### Cluster 1 — Large Multi-Dwelling Projects
+##### Cluster 1 — Large Multi-Dwelling High-rise Projects
 - **Size / Share:** 47 permits (0.5%)
 - **Avg Project Value:** **$107,774,490**
 - **Top Tokens:** unit, park, build, suite, floor, parking
-- **Features:** Almost entirely multiple dwellings, very high value.
+- **Features:** Large multiple dwelling high-rises, very high value.
 - **Interpretation:** **Major residential complexes** (condos/high-rises), extreme outliers in value.
 
 ##### Cluster 2 — Mid-Value Family Housing
@@ -125,11 +136,11 @@ st.markdown(
 - **Features:** Detached homes with a high share of secondary suites.
 - **Interpretation:** **Detached housing stock with basement/secondary suites**, solid mid-value.
 
-##### Cluster 7 — Large Multi-Unit Midrise Projects
+##### Cluster 7 — Large Multi-Unit Mid-rise Projects
 - **Size / Share:** 228 permits (2.4%)
 - **Avg Project Value:** **$27,716,589**
 - **Top Tokens:** unit, park, build, floor, parking, garage
 - **Features:** Predominantly multiple dwellings, high project value.
-- **Interpretation:** **Large multi-unit midrise developments**, substantial project costs.
+- **Interpretation:** **Large multi-unit mid-rise developments**, substantial project costs.
 """
 )

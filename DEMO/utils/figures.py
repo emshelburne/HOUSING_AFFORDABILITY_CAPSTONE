@@ -14,7 +14,9 @@ import re
 import math 
 
 
-
+'''
+This file contains function definitions for generating visualizations for this streamlit app
+'''
 
 
 # Function to plot correlation bar chart

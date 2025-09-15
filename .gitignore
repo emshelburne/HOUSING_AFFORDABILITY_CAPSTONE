@@ -1,7 +1,9 @@
 # don't upload data files
 *.csv
 DATA/
+
 DEMO/data
+DEMO/.streamlit/secrets.toml
 
 # Jupyter Notebook
 .ipynb_checkpoints

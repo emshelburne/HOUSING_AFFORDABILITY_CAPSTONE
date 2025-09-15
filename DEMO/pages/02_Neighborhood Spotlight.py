@@ -2,7 +2,7 @@
 
 import streamlit as st
 import pandas as pd
-from utils.load_data import load_permits, load_econ
+from utils.load_data import resolve_sources, load_permits, load_econ
 from utils.figures import compact_no_currency, compact_cad, animated_cluster_bars, plot_economic_metrics_grid
 
 import matplotlib.pyplot as plt
@@ -19,6 +19,14 @@ import re
 import math
 
 
+src = resolve_sources()
+
+# Load data
+econ_df     = load_econ(src["ECON"])
+permits_all = load_permits(src['PERMITS'])
+
+
+
 # --- Header ---
 st.header("Neighborhood Spotlight")
 
@@ -27,10 +35,8 @@ st.markdown("""
 Explore development activity and renter economics for a particular neighborhood (or all of Vancouver).
 
 **What you’ll see here:**
-- An **animated bar chart** of monthly permit counts by **cluster** (B0, B1, …), with the **total project cost** shown above each bar.
-- You can scope to a specific **neighborhood** or to **Vancouver** (all neighborhoods), pick a **development type** (Builds / Renovations / Demolitions), and adjust the **animation pace**.
+- An **animated bar chart** of monthly permit counts by **cluster** (B0, B1, …), with the **total project cost** shown above each bar. You can scope to a specific **neighborhood** or to **Vancouver** (all neighborhoods), pick a **development type** (Builds / Renovations / Demolitions), and adjust the **animation pace**.
 - A visual summary of economic metrics over time with line graphs.
-- Sample permit identifiers for a chosen neighborhood (which can then be plugged into our permit lookup page).
 """)
 
 # =============== Controls ===============
@@ -57,11 +63,6 @@ if "nbhd_params" not in st.session_state:
     st.session_state.nbhd_params = {}
 if "nbhd_anim_token" not in st.session_state:
     st.session_state.nbhd_anim_token = None
-
-# ---- Placeholders (so we can clear them on reset) ----
-chart_slot = st.empty()   # Plotly animation
-guide_slot = st.empty()   # Cluster guide text
-econ_slot  = st.empty()   # Matplotlib econ grid
 
 # --- User form ---
 with st.form("nbhd_controls", clear_on_submit=False):
@@ -103,6 +104,11 @@ if restart:
     import time
     st.session_state.nbhd_anim_token = f"{time.time():.6f}"
 
+# ---- Placeholders (so we can clear them on reset) ----
+chart_slot = st.empty()   # Plotly animation
+guide_slot = st.empty()   # Cluster guide text
+econ_slot  = st.empty()   # Matplotlib econ grid
+
 if clear:
     st.session_state.nbhd_confirmed = False
     st.session_state.nbhd_params = {}
@@ -112,22 +118,6 @@ if clear:
     guide_slot.empty()
     econ_slot.empty()
 
-# --- Load data (once) ---
-try:
-    permits_all = load_permits(
-        r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\permits.parquet"
-    )
-except Exception as e:
-    st.error(f"Failed to load permits data: {e}")
-    st.stop()
-
-try:
-    econ_df = load_econ(
-        r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\econ.parquet"
-    )
-except Exception as e:
-    econ_df = None
-    st.warning(f"Could not load economic metrics data: {e}")
 
 # --- Render in the desired order: Animation -> Cluster Guide -> Econ Grid ---
 if st.session_state.nbhd_confirmed and st.session_state.nbhd_params:
@@ -155,13 +145,13 @@ if st.session_state.nbhd_confirmed and st.session_state.nbhd_params:
         st.markdown("""
 **New Building Permits**  
 - **B0** – Small Detached & Duplex Mix  
-- **B1** – Large Multi-Dwelling Projects  
+- **B1** – Large Multi-Dwelling High-rise Projects  
 - **B2** – Mid-Value Family Housing  
 - **B3** – Laneway Houses (Lower Value)  
 - **B4** – Numbered Suites & Laneways  
 - **B5** – Duplexes with Secondary Suites  
 - **B6** – Detached with Suites  
-- **B7** – Large Multi-Unit Midrise Projects  
+- **B7** – Large Multi-Unit Mid-rise Projects  
 
 **Renovation Permits**  
 - **R0** – Multi-Unit Interior Renovations  
@@ -187,10 +177,10 @@ if st.session_state.nbhd_confirmed and st.session_state.nbhd_params:
             try:
                 fig_mpl, _axes = plot_economic_metrics_grid(econ_df, nbhd=nbhd_arg)
                 econ_slot.empty()  # clear any previous plot
-                st.pyplot(fig_mpl, clear_figure=True)  # no key here
+                econ_slot.pyplot(fig_mpl, clear_figure=True)   # no key here
             except ValueError as ve:
                 econ_slot.warning(str(ve))
-            except Exception as e:
+            except Exception as e:  
                 econ_slot.exception(e)
 else:
     st.info("Pick your options above and click **Confirm selections** to render the animation.")
