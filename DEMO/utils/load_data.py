@@ -259,25 +259,28 @@ def load_econ(path: str) -> pd.DataFrame:
 # ---------- GeoJSON ----------
 
 @st.cache_data
-def load_geojson(path: str, id_col: str = "nbhd"):
-    
+def load_geojson(path: str | Path, id_col: str = "nbhd"):
     """
     Load a GeoJSON file and return (geojson_dict, geodataframe).
+    Defers geopandas import to avoid Cloud boot-time crashes.
     """
+    import os
+    os.environ.setdefault("GEOPANDAS_IO_ENGINE", "pyogrio")  # prefer wheels
+    import geopandas as gpd  # lazy import to avoid Fiona/GDAL at boot
 
-    gdf = gpd.read_file(path)
+    p = str(path)
+    gdf = gpd.read_file(p)  # will use pyogrio when available
 
-    # Ensure CRS so downstream code doesn't error
     if gdf.crs is None:
         gdf = gdf.set_crs("EPSG:4326", allow_override=True)
 
-    # Keep a lean copy for the geojson (id + geometry) if possible
     if id_col in gdf.columns:
         gdf = gdf.copy()
         gdf[id_col] = gdf[id_col].astype(str)
         geojson_dict = json.loads(gdf[[id_col, "geometry"]].to_json())
     else:
         geojson_dict = json.loads(gdf.to_json())
-    
+
     return geojson_dict, gdf
+
 
