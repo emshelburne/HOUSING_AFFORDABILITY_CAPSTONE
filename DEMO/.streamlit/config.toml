@@ -1,5 +1,7 @@
 [server]
-headless = false
+headless = true
+showEmailPrompt = false
+
 
 [theme]
 base='dark'
