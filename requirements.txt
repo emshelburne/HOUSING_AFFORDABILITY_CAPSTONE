@@ -7,8 +7,8 @@ plotly==5.24.1
 matplotlib==3.10.6
 seaborn==0.13.2
 
-# geospatial via wheels (no GDAL/Fiona)
-geopandas-base==0.14.4
+# geospatial (wheels only; no manual GDAL builds)
+geopandas==0.14.4
 pyogrio==0.11.1
 shapely==2.1.1
 pyproj==3.7.2
