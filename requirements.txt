@@ -1,1 +1,14 @@
+# core
 streamlit==1.49.1
+pandas==2.3.2
+numpy==2.3.3
+pyarrow==21.0.0
+plotly==5.24.1
+matplotlib==3.10.6
+seaborn==0.13.2
+
+# geospatial (all wheels; no manual GDAL builds)
+geopandas==0.14.4
+pyogrio==0.11.1
+shapely==2.1.1
+pyproj==3.7.2
