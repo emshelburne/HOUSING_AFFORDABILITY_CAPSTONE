@@ -3,3 +3,6 @@ headless = false
 
 [theme]
 base='dark'
+
+[browser]
+gatherUsageStats = false
