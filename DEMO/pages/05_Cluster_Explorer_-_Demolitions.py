@@ -5,7 +5,12 @@ import pandas as pd
 import streamlit as st
 
 from utils.figures import plot_clusters_3d
-from utils.load_data import load_vis_clusters
+from utils.load_data import load_vis_clusters, resolve_sources
+
+
+# ---------- Data load ----------
+src = resolve_sources()
+emb = load_vis_clusters(src["VIS_CLUSTERS_BUILDS"])
 
 # ---------- Page Header ----------
 st.header("Cluster Explorer: Demolitions")
@@ -24,8 +29,6 @@ Use the 3D view to rotate/zoom and inspect clusters. Hover to see **Permit ID**,
 """
 )
 
-# ---------- Data load ----------
-DATA_PATH = r"C:\Users\emshe\Desktop\BRAINSTATION\CAPSTONE\GIT_REPO\DEMO\data\vis_clusters_demos.csv"
 
 
 if not os.path.exists(DATA_PATH):

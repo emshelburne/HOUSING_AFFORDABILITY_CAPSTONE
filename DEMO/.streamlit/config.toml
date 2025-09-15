@@ -3,6 +3,3 @@ headless = false
 
 [theme]
 base='dark'
-
-[ui]
-layout = "wide"
