@@ -30,13 +30,6 @@ Use the 3D view to rotate/zoom and inspect clusters. Hover to see **Permit ID**,
 )
 
 
-
-if not os.path.exists(DATA_PATH):
-    st.error(f"Data file not found:\n`{DATA_PATH}`")
-    st.stop()
-
-emb = load_vis_clusters(DATA_PATH)
-
 # Minimal schema check (soft)
 required_cols = {"nlp_x", "nlp_y", "project_value", "cluster", "permit_id"}
 missing = required_cols - set(map(str, emb.columns))
