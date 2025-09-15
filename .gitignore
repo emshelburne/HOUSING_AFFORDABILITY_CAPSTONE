@@ -3,7 +3,7 @@
 DATA/
 
 DEMO/data
-DEMO/.streamlit/secrets.toml
+.streamlit/secrets.toml
 
 # Jupyter Notebook
 .ipynb_checkpoints

@@ -134,7 +134,6 @@ Link to CPI inflation conversion source used for all above data: https://www150.
 - [ ]  Collect references on clustering evaluation metrics (silhouette, Davies–Bouldin, Calinski–Harabasz, ARI, BIC/AIC, etc.)
 - [ ]  Collect references on clustering algorithms and their use in urban/economic studies
 - [ ]  Submit Sprint 3 
-- [ ]  Final submission 
 
 #### Programming
 
@@ -161,12 +160,13 @@ Link to CPI inflation conversion source used for all above data: https://www150.
 - [X]  Integrate clustering results with economic indicators at neighborhood level
 - [X]  Statistical testing for comparing clusters and economic indicators
 - [X]  Summarize results of comparing cluster frequencies to economic indicators
+- [ ]  Streamlit geo visualizer page
+- [ ]  Streamlit neighborhood spotlight
+- [ ]  Streamlit cluster explorer pages
+- [ ]  Streamlit correlation summary page
+- [ ]  Streamlit permit look up page
 - [ ]  Build web app
 
-#### Optional Next Steps
-
-- [ ]  Cluster neighborhoods by economic state (e.g., rent, vacancy profiles)
-- [ ]  Cluster permits paired with neighborhood data as “development decisions”
 
 
 
