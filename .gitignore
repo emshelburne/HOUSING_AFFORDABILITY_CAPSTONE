@@ -1,3 +1,10 @@
+
+# Editor / environment configs
+.devcontainer/
+.vscode/
+.idea/
+
+
 # don't upload data files
 
 

@@ -47,23 +47,35 @@ The interactive demo is delivered as a **Streamlit web application**, designed t
 
 #### Repository 
 
-* `NOTEBOOKS`
-    - contains all notebooks involved in the project
+* `APP_DATA`
+    - Contains all preprocessed data files used by the Streamlit app.
+
+* `DEMO`
+    - Streamlit application folder; includes `Home_Page.py` as the entry point and supporting app pages.
 
 * `DOCS`
-    - contains documents and presentations which summarize the project
+    - Contains documents, reports, and presentations that summarize the project.
+
+* `NOTEBOOKS`
+    - Jupyter notebooks for data exploration, analysis, and modeling.
 
 * `.gitignore`
-    - Part of Git, includes files and folders to be ignored by Git version control
-
-* `capstone_env.yml`
-    - Conda environment specification
-
-* `README.md`
-    - Project landing page (this page)
+    - Git configuration file listing files and folders to exclude from version control.
 
 * `LICENSE`
-    - Project license
+    - Project license file.
+
+* `README.txt`
+    - Project overview and instructions (this page).
+
+* `capstone_env.yml`
+    - Conda environment specification for reproducing the project environment.
+
+* `requirements.txt`
+    - Python dependencies needed to run the Streamlit app.
+
+* `runtime.txt`
+    - Runtime specification (used by Streamlit Cloud to determine the Python version).
 
 
 

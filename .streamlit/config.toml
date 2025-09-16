@@ -7,3 +7,4 @@ base='dark'
 
 [browser]
 gatherUsageStats = false
+layout = "wide"
