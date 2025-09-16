@@ -72,28 +72,28 @@ with st.expander("Significant at 10% FDR (|corr| ≥ 0.25) — Spearman"):
     st.markdown(
         """
 ##### Renovations
-- **''Reno Cluster 1 (Single-Detached Home Renovations)**  
+- **Reno Cluster 1 (Single-Detached Home Renovations)**  
   ↔ **Vacancy Rate (3+ BR), Lead 5 years** — **+0.46**  
   *Interpretation:* Higher detached-home renovation intensity links to **higher large-unit vacancy** after five years.  
   *Speculative link:* Renovations may shift neighbourhood composition, increasing turnover or availability in large rentals.  
 
 ##### New Buildings
-- **''Build Cluster 0 (Small Detached & Duplex Mix)**  
+- **Build Cluster 0 (Small Detached & Duplex Mix)**  
   ↔ **Vacancy Rate (Total; 1BR; 2BR; 3+BR), Lead 2–3 years**; **Avg Rent (1BR), Lead 2 years** — **−0.36 to −0.39**  
   *Interpretation:* Detached/duplex activity is associated with **lower near-term vacancies and slower 1BR rent growth**.  
   *Speculative link:* Modest infill may relieve localized pressure in smaller-unit markets.  
 
-- **''Build Cluster 0 (Small Detached & Duplex Mix)**  
+- **Build Cluster 0 (Small Detached & Duplex Mix)**  
   ↔ **Vacancy Rate (3+ BR), Lead 5 years** — **+0.49**  
   *Interpretation:* Over longer horizons, the same activity corresponds to **higher vacancies in large rentals**.  
   *Speculative link:* Detached/duplex homes may substitute for large rentals, increasing vacancies in that segment.  
 
-- **''Build Cluster 2 (Mid-Value Family Housing)**  
+- **Build Cluster 2 (Mid-Value Family Housing)**  
   ↔ **Vacancy Rate (3+ BR), Lead 4 years** — **−0.39**  
   *Interpretation:* Family-oriented builds correlate with **tighter large-unit vacancies** later on.  
   *Speculative link:* Demand spillovers from family-focused development may tighten nearby large-unit markets.  
 
-- **''Build Cluster 5 (Duplexes with Secondary Suites)**  
+- **Build Cluster 5 (Duplexes with Secondary Suites)**  
   ↔ **Vacancy Rate (Total), Lead 1 year** — **+0.47**  
   *Interpretation:* Suite-heavy duplexes associate with **higher short-run total vacancies**.  
   *Speculative link:* Rapid addition of suites may temporarily expand rental options and raise vacancy.  
@@ -104,32 +104,32 @@ with st.expander("Exploratory at 20% FDR (|corr| ≥ 0.25) — Spearman"):
     st.markdown(
         """
 ##### New Buildings
-- **''Build Cluster 5 (Duplexes + Suites)**  
+- **Build Cluster 5 (Duplexes + Suites)**  
   ↔ **Vacancy (3+ BR), Lead 1 year** — **+0.45**  
   *Speculative link:* New suites may compete with large rentals in the short run.  
 
-- **''Build Cluster 0 (Small Detached & Duplex)**  
+- **Build Cluster 0 (Small Detached & Duplex)**  
   ↔ **Median Rent (Studios), Lead 2 years** — **−0.33**  
   *Speculative link:* Modest infill may dampen studio rent growth.  
 
-- **''Build Cluster 7 (Large Midrise Projects)**  
+- **Build Cluster 7 (Large Midrise Projects)**  
   ↔ **Avg Rent (Total), Lead 4 years** — **−0.45**  
   *Speculative link:* Larger multi-unit supply may stabilize overall rents.  
 
-- **''Build Cluster 0**  
+- **Build Cluster 0**  
   ↔ **Vacancy (Total), L4–5y** — **+0.39 to +0.44**  
   *Speculative link:* Detached/duplex infill may loosen occupancy over time.  
 
-- **''Build Cluster 0**  
+- **Build Cluster 0**  
   ↔ **Vacancy (Studios), Lead 2 years** — **−0.32**  
   *Speculative link:* Heterogeneous effects by unit size—pressure easing in very small units.  
 
 ##### Renovations
-- **''Reno Cluster 4 (Large-Scale Structural Repairs)**  
+- **Reno Cluster 4 (Large-Scale Structural Repairs)**  
   ↔ **Median Rent (1BR), Lead 1 year** — **−0.62**  
   *Speculative link:* Large scale repairs may expand the rental market, softening rent growth.  
 
-- **''Reno Cluster 5 (Multi-Unit Alterations)**  
+- **Reno Cluster 5 (Multi-Unit Alterations)**  
   ↔ **Vacancy (1BR), Lead 3 years** — **−0.80**  
   *Speculative link:* Targeted upgrades in persistently occupied buildings.  
         """
@@ -150,23 +150,23 @@ with st.expander("Significant at 10% FDR (|corr| ≥ 0.25) — Kendall"):
     st.markdown(
         """
 ##### Renovations
-- **''Reno Cluster 1 (Single-Detached Home Renovations)**  
+- **Reno Cluster 1 (Single-Detached Home Renovations)**  
   ↔ **Vacancy Rate (3+ BR), Lead 4 years** — **+0.34**  
   *Interpretation:* Renovation intensity associates with **higher large-unit vacancy** after five years.  
   *Speculative link:* Longer-run neighbourhood change altering demand in large rental stock.  
 
 ##### New Buildings
-- **''Build Cluster 0 (Small Detached & Duplex Mix)**  
+- **Build Cluster 0 (Small Detached & Duplex Mix)**  
   ↔ **Avg Rent (1BR), Lead 2 years**; **Vacancy (Total, 1BR, 2BR, 3+BR), L2–3y** — **−0.26 to −0.28**  
   *Interpretation:* Detached/duplex activity corresponds to **slower 1BR rent growth** and **lower near-term vacancies**.  
   *Speculative link:* Modest infill can relieve local pressure and stabilize occupancy.  
 
-- **''Build Cluster 0**  
+- **Build Cluster 0**  
   ↔ **Vacancy (3+ BR), Lead 4 years** — **+0.39**  
   *Interpretation:* Longer-run **higher large-unit vacancies**.  
   *Speculative link:* Substitution away from multi-bedroom rentals toward detached/duplex options.  
 
-- **''Build Cluster 2 (Mid-Value Family Housing)**  
+- **Build Cluster 2 (Mid-Value Family Housing)**  
   ↔ **Vacancy (3+ BR), Lead 4 years** — **−0.29**  
   *Interpretation:* Family-oriented builds correlate with **tighter large-unit vacancies**.  
   *Speculative link:* Demand spillovers tighten the larger-unit segment.  
@@ -177,19 +177,19 @@ with st.expander("Exploratory at 20% FDR (|corr| ≥ 0.25) — Kendall"):
     st.markdown(
         """
 ##### New Buildings
-- **''Build Cluster 0 (Small Detached & Duplex)**  
+- **Build Cluster 0 (Small Detached & Duplex)**  
   ↔ **Vacancy (Total), L4–5y** — **+0.27 to +0.35**  
   *Speculative link:* Longer-run loosening of occupancy as detached/duplex stock expands.  
 
-- **''Build Cluster 5 (Duplexes + Suites)**  
+- **Build Cluster 5 (Duplexes + Suites)**  
   ↔ **Vacancy (Total / 3+BR / Studios), Lead 1 year** — **+0.30 to +0.33** (n≈48)  
   *Speculative link:* Rapid suite supply raises short-run vacancy across segments.  
 
-- **''Build Cluster 7 (Large Midrise Projects)**  
+- **Build Cluster 7 (Large Midrise Projects)**  
   ↔ **Avg Rent (Total), Lead 4 years** — **−0.30**  
   *Speculative link:* Medium-term rent stabilization from larger multi-unit supply.  
 
-- **''Build Cluster 4 (Small + Suites/Laneways)**  
+- **Build Cluster 4 (Small + Suites/Laneways)**  
   ↔ **Median Rent (3+BR), Lead 1 year** — **−0.32**  
   *Speculative link:* Added suites/laneways may ease pressure on family-sized rentals.  
         """
