@@ -311,7 +311,7 @@ def animated_cluster_bars(
     df["month"] = df["issue_date"].dt.to_period("M").dt.to_timestamp()
     df["project_value"] = pd.to_numeric(df["project_value"], errors="coerce").fillna(0.0)
 
-    # ===== CHANGED: build a continuous monthly range so empty months still render =====
+    # ===== build a continuous monthly range so empty months still render =====
     first_month = df["month"].min()
     last_month  = df["month"].max()
     # use start-of-month frequency to get every month in the span
@@ -325,7 +325,6 @@ def animated_cluster_bars(
              .reset_index())
 
     # Build full month×fixed-label grid and fill missing with zeros
-    from itertools import product
     full_grid = pd.DataFrame(
         [{"month": m, cluster_col: c} for m, c in product(all_months, labels_all)]
     )
@@ -342,18 +341,67 @@ def animated_cluster_bars(
     data_full["month_str"] = pd.to_datetime(data_full["month"]).dt.strftime("%b %Y")
 
     # ---- figure
-    import plotly.express as px
+
+
+    # stable color map for clusters
+    palette = (
+        px.colors.qualitative.Dark24
+        + px.colors.qualitative.Set3
+        + px.colors.qualitative.Pastel  # plenty; we only need first len(labels_all)
+    )
+    color_map = {lab: palette[i % len(palette)] for i, lab in enumerate(labels_all)}
+
     fig = px.bar(
         data_full,
-        x=cluster_col, y="count", color=cluster_col,
+        x=cluster_col, y="count",
+        # NOTE: do NOT pass color=cluster_col (that causes grouped skinny bars)
         animation_frame="month",
-        category_orders={cluster_col: labels_all},  # fixed order
+        category_orders={cluster_col: labels_all},
         labels={"count":"Permits", cluster_col:"Cluster", "month":"Month"},
         title=f"Monthly {permit_category.capitalize()} Permits by Cluster"
               + ("" if neighborhood.lower()=="vancouver" else f" — {neighborhood}"),
         text="sum_value_label",
         custom_data=["month_str","sum_value_compact_nc"]
     )
+
+    # Apply per-point colors to the single trace in the base data
+    if fig.data:
+        x_vals = list(fig.data[0].x)
+        fig.data[0].marker.update(color=[color_map.get(x, "#888") for x in x_vals])
+
+    # And to each animation frame (the frame has a single trace too)
+    for fr in (fig.frames or []):
+        if fr.data:
+            x_vals = list(fr.data[0].x)
+            fr.data[0].marker = fr.data[0].marker or {}
+            fr.data[0].marker.update(color=[color_map.get(x, "#888") for x in x_vals])
+
+    hover_tmpl = (
+        "<b>%{x}</b><br>"
+        "Month: %{customdata[0]}<br>"
+        "Permits: %{y}<br>"
+        "Total Cost = %{customdata[1]}<extra></extra>"
+    )
+    fig.update_traces(textposition="outside", cliponaxis=False,
+                      hovertemplate=hover_tmpl, showlegend=False)
+    if fig.frames:
+        for fr in fig.frames:
+            for tr in fr.data:
+                tr.hovertemplate = hover_tmpl
+                tr.textposition = "outside"
+                tr.cliponaxis = False
+                tr.showlegend = False
+    # fig = px.bar(
+    #     data_full,
+    #     x=cluster_col, y="count", color=cluster_col,
+    #     animation_frame="month",
+    #     category_orders={cluster_col: labels_all},  # fixed order
+    #     labels={"count":"Permits", cluster_col:"Cluster", "month":"Month"},
+    #     title=f"Monthly {permit_category.capitalize()} Permits by Cluster"
+    #           + ("" if neighborhood.lower()=="vancouver" else f" — {neighborhood}"),
+    #     text="sum_value_label",
+    #     custom_data=["month_str","sum_value_compact_nc"]
+    # )
 
     hover_tmpl = (
         "<b>%{x}</b><br>"

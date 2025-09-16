@@ -1,11 +1,14 @@
 # streamlit_app: Home Page
 
+
+# Uncomment below for tests
+
 # Boot diagnostic
-import os, sys, logging
-os.environ.setdefault("GEOPANDAS_IO_ENGINE", "pyogrio")
-os.environ.setdefault("PYTHONUNBUFFERED", "1")  # flush prints to logs
-logging.basicConfig(level=logging.INFO)
-print("Boot: reached top of Home_Page.py", file=sys.stderr, flush=True)
+# import os, sys, logging
+# os.environ.setdefault("GEOPANDAS_IO_ENGINE", "pyogrio")
+# os.environ.setdefault("PYTHONUNBUFFERED", "1")  # flush prints to logs
+# logging.basicConfig(level=logging.INFO)
+# print("Boot: reached top of Home_Page.py", file=sys.stderr, flush=True)
 
 
 import streamlit as st

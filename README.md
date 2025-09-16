@@ -65,7 +65,7 @@ The interactive demo is delivered as a **Streamlit web application**, designed t
 * `LICENSE`
     - Project license file.
 
-* `README.txt`
+* `README.md`
     - Project overview and instructions (this page).
 
 * `capstone_env.yml`
