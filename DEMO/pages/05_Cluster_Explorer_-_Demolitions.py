@@ -10,7 +10,7 @@ from utils.load_data import load_vis_clusters, resolve_sources
 
 # ---------- Data load ----------
 src = resolve_sources()
-emb = load_vis_clusters(src["VIS_CLUSTERS_BUILDS"])
+emb = load_vis_clusters(src["VIS_CLUSTERS_DEMOS"])
 
 # ---------- Page Header ----------
 st.header("Cluster Explorer: Demolitions")
