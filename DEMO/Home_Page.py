@@ -35,7 +35,7 @@ with high-density housing, raising important questions about affordability and n
 We collected permit data from the City of Vancouver and economic indicators (rents, vacancy rates) from CMHC. 
 Using four clustering algorithms—**K-Means, Gaussian Mixture, HDBSCAN, and Agglomerative**—we found that 
 **Agglomerative Clustering** best captured meaningful patterns across permit descriptions. 
-To measure how development intensity varies across space and time, we introduced the **NFiCF metric** 
+To measure how development intensity varies across space and time, we introduced the **NF-ICF metric** 
 (Neighborhood Fraction in Cluster Frequency). We then tested for correlations between cluster intensity 
 and renter-focused metrics such as average and median rents and vacancy rates.
 
