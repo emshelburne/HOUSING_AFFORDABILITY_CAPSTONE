@@ -44,7 +44,7 @@ st.latex(r"""
    & N_{d,K}^{\mathrm{city}} &= \text{\# permits citywide of type $d$ in cluster $K$}, \\
    && N_{d}^{\mathrm{city}} &= \text{\# permits citywide of type $d$ (all clusters)}. \\[1em]
     
-\text{NC\text{-}ICF}_{i,t}^{(d,K)} 
+\text{NF\text{-}ICF}_{i,t}^{(d,K)} 
    &= \mathrm{share}_{i,t}^{(d,K)} \times \mathrm{ICF}_{d,K}.
 \end{aligned}
 
